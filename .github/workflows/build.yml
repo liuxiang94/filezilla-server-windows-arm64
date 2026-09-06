@@ -17,7 +17,7 @@ jobs:
       - name: Install tools
         run: |
           sudo apt update
-          sudo apt install \
+          sudo apt install -y \
             gcc git cmake ninja-build nsis autoconf-archive pkg-config p7zip libtool make colormake gettext automake autoconf autogen autopoint patch wx-common subversion 
           wget https://github.com/mstorsjo/llvm-mingw/releases/download/20260616/llvm-mingw-20260616-ucrt-ubuntu-22.04-x86_64.tar.xz
           tar -xf llvm-mingw-*.tar.xz
@@ -47,9 +47,6 @@ jobs:
           echo "set(VCPKG_BUILD_TYPE release)" >> triplets_overlay/arm64-mingw-dynamic-release.cmake
           # clear buildtrees after each package installation to reduce disk space requirements
           packages="sqlite3 zlib"
-          ./vcpkg upgrade \
-            --overlay-triplets=triplets_overlay \
-            --no-dry-run
           ./vcpkg install \
             --overlay-triplets=triplets_overlay \
             --clean-after-build \

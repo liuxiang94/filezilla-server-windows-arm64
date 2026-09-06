@@ -12,10 +12,12 @@ if [ $# == 1 ]; then
         arch=arm32
         vcpkg_libs_dir=$vcpkg_dir/installed/arm-mingw-dynamic-release
         TARGET=armv7-w64-mingw32
+        export libclang_rt="${llvm_dir}/lib/clang/22/lib/windows/libclang_rt.builtins-arm.a"
     elif [ $1 == "arm64" ]; then
         arch=arm64
         vcpkg_libs_dir=$vcpkg_dir/installed/arm64-mingw-dynamic-release
         TARGET=aarch64-w64-mingw32
+        export libclang_rt="${llvm_dir}/lib/clang/22/lib/windows/libclang_rt.builtins-aarch64.a"
     else
         echo $help_msg
         exit -1
@@ -25,8 +27,8 @@ else
     exit -1
 fi
 
-libfilezilla_version=0.57.0
-filezilla_version=3.71.1
+libfilezilla_version=0.56.0
+filezilla_server_version=1.12.6
 filezilla_server_path=$PWD/filezilla-server-windows-$arch
 gnutls_ver=3.8.13
 gnutls_ver_main="${gnutls_ver%.*}"
@@ -113,7 +115,9 @@ popd
 $wget https://sourceforge.net/projects/fabiololix-os-archive/files/src/FileZilla_Server_${filezilla_server_version}_src.tar.xz
 tar xf FileZilla_Server_${filezilla_server_version}_src.tar.xz
 pushd filezilla-server-${filezilla_server_version}
+patch -Np2 -i ${work_dir}/patches/filezilla-server-Remove-demos-leftovers.patch
 ./configure --host=$TARGET --prefix=${filezilla_server_path} --enable-shared --disable-static --with-pugixml=builtin --with-wx-config=${prefix}/bin/wx-config
+sed -i "s|-g++|-g++ $libclang_rt|g" libtool
 gnumakeplusinstall
 find . -name "*.exe" -exec $TARGET-strip {} \;
 find $filezilla_server_path -name "*.exe" -exec $TARGET-strip {} \;
