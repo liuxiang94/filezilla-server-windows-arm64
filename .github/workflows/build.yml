@@ -42,7 +42,6 @@ jobs:
           export PATH=${{ env.llvm_path }}/bin:$PATH
           cd ${{ env.RUNVCPKG_VCPKG_ROOT }}
           sed -i 's/OPTIONS/OPTIONS\n--disable-hardware-acceleration/g' ports/libgnutls/portfile.cmake
-          git apply ${{ github.workspace }}/patches/vcpkg-disable-asm-for-arm32.patch
           # tell vcpkg to only build Release variants of the dependencies
           mkdir triplets_overlay
           cp triplets/community/arm64-mingw-static.cmake triplets_overlay/arm64-mingw-static-release.cmake
