@@ -39,7 +39,7 @@ unistring_ver=1.4.2
 fzssh_version=1.4.0
 wxwidgets_version=3.2.11
 
-export PATH=$llvm_dir/bin:$PATH
+export PATH=$llvm_dir/bin:$llvm_dir/$TARGET/bin:$vcpkg_libs_dir/bin:$prefix/bin:$PATH
 export PKG_CONFIG_LIBDIR=$vcpkg_libs_dir/lib/pkgconfig:$prefix/lib/pkgconfig
 export PKG_CONFIG_PATH=$PKG_CONFIG_LIBDIR
 export CPPFLAGS="-I$vcpkg_libs_dir/include -I$prefix/include"
